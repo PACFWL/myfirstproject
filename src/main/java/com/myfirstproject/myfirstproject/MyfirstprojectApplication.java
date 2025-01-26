@@ -11,3 +11,4 @@ public class MyfirstprojectApplication {
 	}
 
 }
+//estes são meus codigos iniciais do projeto e quero conecta-los ao mongoDB Compass, quero um crud de login de usuario com email e senha e também cadastrar o usuario inicial
