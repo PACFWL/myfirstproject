@@ -1,7 +1,9 @@
 package com.myfirstproject.myfirstproject.controller;
 
+import com.myfirstproject.myfirstproject.dto.MusicDTO;
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.service.MusicService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +18,22 @@ public class MusicController {
     private MusicService musicService;
 
     @PostMapping
-    public Music createMusic(@RequestBody Music music) {
+    public Music createMusic(@Valid @RequestBody Music music) {
         return musicService.createMusic(music);
     }
 
     @GetMapping("/{id}")
-    public Optional<Music> getMusicById(@PathVariable String id) {
+    public Optional<MusicDTO> getMusicById(@PathVariable String id) {
         return musicService.getMusicById(id);
     }
 
     @GetMapping
-    public List<Music> getAllMusic() {
+    public List<MusicDTO> getAllMusic() {
         return musicService.getAllMusic();
     }
 
     @PutMapping("/{id}")
-    public Music updateMusic(@PathVariable String id, @RequestBody Music music) {
+    public Music updateMusic(@PathVariable String id, @Valid @RequestBody Music music) {
         return musicService.updateMusic(id, music);
     }
 

@@ -9,9 +9,9 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//import javax.crypto.spec.SecretKeySpec;
+
 import java.security.Key;
-//import java.util.Base64;
+
 
 import java.util.Date;
 import java.util.Optional;
@@ -23,14 +23,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    //private String SECRET_KEY = Base64.getEncoder().encodeToString("mySecretKey".getBytes());
-
     public User createUser(User user) {
         return userRepository.save(user);
     }
 
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
     }
 
     public User updateUser(String id, User user) {
