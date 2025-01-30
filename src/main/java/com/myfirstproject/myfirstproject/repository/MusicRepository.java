@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface MusicRepository extends MongoRepository<Music, String> {
-    List<Music> findByGenre(String genre);
+    List<Music> findByGenreIn(List<String> genres);  
     List<Music> findByArtist(String artist);
     List<Music> findByRatingGreaterThanEqual(double rating);
 }

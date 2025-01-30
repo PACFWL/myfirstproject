@@ -32,6 +32,11 @@ public class MusicController {
         return musicService.getAllMusic();
     }
 
+    @GetMapping("/by-genres")
+    public List<MusicDTO> getMusicByGenres(@RequestParam List<String> genres) {
+        return musicService.getMusicByGenre(genres);
+    }
+
     @PutMapping("/{id}")
     public Music updateMusic(@PathVariable String id, @Valid @RequestBody Music music) {
         return musicService.updateMusic(id, music);

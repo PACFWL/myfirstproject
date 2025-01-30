@@ -1,6 +1,7 @@
 package com.myfirstproject.myfirstproject.dto;
 
 import lombok.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -11,7 +12,7 @@ public class MusicDTO {
     private String artist;
     private String album;
     private int releaseYear;
-    private String genre;
+    private List<String> genre; 
     private double duration;
     private double rating;
     private String lyrics;

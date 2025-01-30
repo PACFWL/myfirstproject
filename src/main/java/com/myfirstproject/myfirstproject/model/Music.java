@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 import java.util.UUID;
 
 @Document(collection = "music")
@@ -31,8 +32,7 @@ public class Music {
     @Min(value = 1800, message = "O ano de lançamento deve ser maior que 1800.")
     private int releaseYear;
 
-    @NotBlank(message = "O gênero é obrigatório.")
-    private String genre;
+    private List<String> genre; 
 
     private double duration;
     private double rating;

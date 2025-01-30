@@ -30,7 +30,7 @@ public class MusicService {
     public Optional<MusicDTO> getMusicById(String id) {
         logger.info("Buscando música com ID: {}", id);
         return musicRepository.findById(id)
-                .map(music -> convertToDTO(music));
+                .map(this::convertToDTO);
     }
 
     public List<MusicDTO> getAllMusic() {
@@ -40,9 +40,9 @@ public class MusicService {
                 .collect(Collectors.toList());
     }
 
-    public List<MusicDTO> getMusicByGenre(String genre) {
-        logger.info("Buscando músicas do gênero: {}", genre);
-        return musicRepository.findByGenre(genre).stream()
+    public List<MusicDTO> getMusicByGenre(List<String> genres) {
+        logger.info("Buscando músicas dos gêneros: {}", genres);
+        return musicRepository.findByGenreIn(genres).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -78,7 +78,7 @@ public class MusicService {
                 .artist(music.getArtist())
                 .album(music.getAlbum())
                 .releaseYear(music.getReleaseYear())
-                .genre(music.getGenre())
+                .genre(music.getGenre())  // Mantendo como lista
                 .duration(music.getDuration())
                 .rating(music.getRating())
                 .lyrics(music.getLyrics())
