@@ -13,8 +13,27 @@ public class InitialMusicSetup {
     CommandLineRunner initMusicDatabase(MusicRepository musicRepository) {
         return args -> {
             if (musicRepository.findAll().isEmpty()) {
-                musicRepository.save(new Music("Song 1", "Artist 1", "Album 1", 2021));
-                musicRepository.save(new Music("Song 2", "Artist 2", "Album 2", 2022));
+                musicRepository.save(Music.builder()
+                        .title("Song 1")
+                        .artist("Artist 1")
+                        .album("Album 1")
+                        .releaseYear(2021)
+                        .genre("Pop")
+                        .duration(3.5)
+                        .rating(8.2)
+                        .lyrics("Sample lyrics for Song 1...")
+                        .build());
+
+                musicRepository.save(Music.builder()
+                        .title("Song 2")
+                        .artist("Artist 2")
+                        .album("Album 2")
+                        .releaseYear(2022)
+                        .genre("Rock")
+                        .duration(4.2)
+                        .rating(9.0)
+                        .lyrics("Sample lyrics for Song 2...")
+                        .build());
             }
         };
     }

@@ -30,13 +30,34 @@ public class MusicService {
     public Optional<MusicDTO> getMusicById(String id) {
         logger.info("Buscando música com ID: {}", id);
         return musicRepository.findById(id)
-                .map(music -> new MusicDTO(music.getTitle(), music.getArtist(), music.getAlbum(), music.getReleaseYear()));
+                .map(music -> convertToDTO(music));
     }
 
     public List<MusicDTO> getAllMusic() {
         logger.info("Buscando todas as músicas.");
         return musicRepository.findAll().stream()
-                .map(music -> new MusicDTO(music.getTitle(), music.getArtist(), music.getAlbum(), music.getReleaseYear()))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MusicDTO> getMusicByGenre(String genre) {
+        logger.info("Buscando músicas do gênero: {}", genre);
+        return musicRepository.findByGenre(genre).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MusicDTO> getMusicByArtist(String artist) {
+        logger.info("Buscando músicas do artista: {}", artist);
+        return musicRepository.findByArtist(artist).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MusicDTO> getMusicByRating(double rating) {
+        logger.info("Buscando músicas com avaliação maior ou igual a: {}", rating);
+        return musicRepository.findByRatingGreaterThanEqual(rating).stream()
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -49,5 +70,18 @@ public class MusicService {
     public void deleteMusic(String id) {
         logger.info("Deletando música com ID: {}", id);
         musicRepository.deleteById(id);
+    }
+
+    private MusicDTO convertToDTO(Music music) {
+        return MusicDTO.builder()
+                .title(music.getTitle())
+                .artist(music.getArtist())
+                .album(music.getAlbum())
+                .releaseYear(music.getReleaseYear())
+                .genre(music.getGenre())
+                .duration(music.getDuration())
+                .rating(music.getRating())
+                .lyrics(music.getLyrics())
+                .build();
     }
 }

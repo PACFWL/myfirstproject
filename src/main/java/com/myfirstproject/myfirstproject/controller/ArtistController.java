@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.myfirstproject.myfirstproject.dto.ArtistDTO;
 import com.myfirstproject.myfirstproject.model.Artist;
 import com.myfirstproject.myfirstproject.service.ArtistService;
 
@@ -21,12 +23,12 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Artist> getArtistById(@PathVariable String id) {
+    public Optional<ArtistDTO> getArtistById(@PathVariable String id) {
         return artistService.getArtistById(id);
     }
 
     @GetMapping
-    public List<Artist> getAllArtist() {
+    public List<ArtistDTO> getAllArtist() {
         return artistService.getAllArtist();
     }
 

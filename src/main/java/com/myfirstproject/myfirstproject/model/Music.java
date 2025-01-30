@@ -2,14 +2,22 @@ package com.myfirstproject.myfirstproject.model;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 @Document(collection = "music")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Music {
 
     @Id
-    private String id;
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
 
     @NotBlank(message = "O título é obrigatório.")
     private String title;
@@ -23,54 +31,10 @@ public class Music {
     @Min(value = 1800, message = "O ano de lançamento deve ser maior que 1800.")
     private int releaseYear;
 
-    public Music() {}
+    @NotBlank(message = "O gênero é obrigatório.")
+    private String genre;
 
-    public Music(String title, String artist, String album, int releaseYear) {
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.releaseYear = releaseYear;
-    }
-
-    // Getters e Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public int getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
+    private double duration;
+    private double rating;
+    private String lyrics;
 }
-
