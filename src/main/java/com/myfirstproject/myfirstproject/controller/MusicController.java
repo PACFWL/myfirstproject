@@ -21,6 +21,20 @@ public class MusicController {
         this.musicService = musicService;
     }
 
+    @GetMapping("/search")
+    public List<MusicDTO> advancedSearch(
+            @RequestParam(required = false) String artist,
+            @RequestParam(required = false) String album,
+            @RequestParam(required = false) List<String> genres,
+            @RequestParam(required = false) Integer releaseYear,
+            @RequestParam(required = false) Double minRating,
+            @RequestParam(required = false) Integer afterYear,
+            @RequestParam(required = false) Boolean isExplicit,
+            @RequestParam(required = false) Boolean noLyrics,
+            @RequestParam(required = false) String featuringArtist) {
+        return musicService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist);
+    }
+
     @PostMapping
     public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
         return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));

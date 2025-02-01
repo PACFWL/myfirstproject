@@ -7,7 +7,9 @@ import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.repository.MusicRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,14 +24,36 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Validated
 public class MusicService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MusicService.class);
-
+   private static final Logger logger = LoggerFactory.getLogger(MusicService.class);
     private final MusicRepository musicRepository;
+    private final MongoTemplate mongoTemplate;
 
-    @Autowired
-    public MusicService(MusicRepository musicRepository) {
+    public MusicService(MusicRepository musicRepository, MongoTemplate mongoTemplate) {
         this.musicRepository = musicRepository;
+        this.mongoTemplate = mongoTemplate;
     }
+
+    public List<MusicDTO> advancedSearch(String artist, String album, List<String> genres, Integer releaseYear,
+                                          Double minRating, Integer afterYear, Boolean isExplicit,
+                                          Boolean noLyrics, String featuringArtist) {
+        Query query = new Query();
+
+        if (artist != null) query.addCriteria(Criteria.where("artist").is(artist));
+        if (album != null) query.addCriteria(Criteria.where("album").is(album));
+        if (genres != null && !genres.isEmpty()) query.addCriteria(Criteria.where("genre").in(genres));
+        if (releaseYear != null) query.addCriteria(Criteria.where("releaseYear").is(releaseYear));
+        if (minRating != null) query.addCriteria(Criteria.where("rating").gte(minRating));
+        if (afterYear != null) query.addCriteria(Criteria.where("releaseYear").gt(afterYear));
+        if (isExplicit != null) query.addCriteria(Criteria.where("isExplicit").is(isExplicit));
+        if (noLyrics != null && noLyrics) query.addCriteria(Criteria.where("lyrics").is(null));
+        if (featuringArtist != null) query.addCriteria(Criteria.where("featuredArtists").in(featuringArtist));
+
+        logger.info("Executando busca avançada com critérios: {}", query);
+        
+        List<Music> results = mongoTemplate.find(query, Music.class);
+        return results.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 
     public MusicDTO createMusic(MusicCreateDTO musicCreateDTO) {
         logger.info("Criando música: {}", musicCreateDTO);
@@ -135,3 +159,5 @@ public class MusicService {
     }
       
 }
+
+
