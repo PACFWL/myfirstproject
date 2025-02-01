@@ -1,26 +1,20 @@
-package com.myfirstproject.myfirstproject.model;
+package com.myfirstproject.myfirstproject.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
-@Document(collection = "music")
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Music {
-
-    @Id
-    @Builder.Default
-    private String id = UUID.randomUUID().toString();
-
+public class MusicCreateDTO {
     @NotBlank(message = "O título é obrigatório.")
     private String title;
 
@@ -33,10 +27,14 @@ public class Music {
     @Min(value = 1800, message = "O ano de lançamento deve ser maior que 1800.")
     private int releaseYear;
 
-    private LocalDate releaseDate; 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate releaseDate;
+    
     private List<String> genre;
-    private List<String> featuredArtists; 
-    private boolean isExplicit; 
+    private List<String> featuredArtists;
+
+    @JsonProperty("isExplicit")
+    private boolean isExplicit;
 
     private double duration;
     private double rating;

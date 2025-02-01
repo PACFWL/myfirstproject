@@ -9,16 +9,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MusicDTO {
+public class MusicUpdateDTO {
     private String title;
     private String artist;
     private String album;
-    private int releaseYear;
+    private Integer releaseYear;
     private LocalDate releaseDate;
     private List<String> genre;
     private List<String> featuredArtists;
-    private boolean isExplicit;
-    private double duration;
-    private double rating;
+    private Boolean isExplicit;
+    private Double duration;
+    private Double rating;
     private String lyrics;
 }

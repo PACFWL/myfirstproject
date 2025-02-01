@@ -1,49 +1,56 @@
 package com.myfirstproject.myfirstproject.controller;
 
+import com.myfirstproject.myfirstproject.dto.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.MusicDTO;
-import com.myfirstproject.myfirstproject.model.Music;
+import com.myfirstproject.myfirstproject.dto.MusicUpdateDTO;
 import com.myfirstproject.myfirstproject.service.MusicService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/music")
 public class MusicController {
 
-    @Autowired
-    private MusicService musicService;
+    private final MusicService musicService;
+
+    
+    public MusicController(MusicService musicService) {
+        this.musicService = musicService;
+    }
 
     @PostMapping
-    public Music createMusic(@Valid @RequestBody Music music) {
-        return musicService.createMusic(music);
+    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
+        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
     }
 
     @GetMapping("/{id}")
-    public Optional<MusicDTO> getMusicById(@PathVariable String id) {
-        return musicService.getMusicById(id);
+    public ResponseEntity<MusicDTO> getMusicById(@PathVariable String id) {
+        return musicService.getMusicById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public List<MusicDTO> getAllMusic() {
-        return musicService.getAllMusic();
+    public ResponseEntity<List<MusicDTO>> getAllMusic() {
+        return ResponseEntity.ok(musicService.getAllMusic());
     }
 
     @GetMapping("/by-genres")
-    public List<MusicDTO> getMusicByGenres(@RequestParam List<String> genres) {
-        return musicService.getMusicByGenre(genres);
+    public ResponseEntity<List<MusicDTO>> getMusicByGenres(@RequestParam List<String> genres) {
+        return ResponseEntity.ok(musicService.getMusicByGenre(genres));
     }
 
     @PutMapping("/{id}")
-    public Music updateMusic(@PathVariable String id, @Valid @RequestBody Music music) {
-        return musicService.updateMusic(id, music);
+    public ResponseEntity<MusicDTO> updateMusic(@PathVariable String id, @Valid @RequestBody MusicUpdateDTO musicUpdateDTO) {
+        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMusic(@PathVariable String id) {
+    public ResponseEntity<Void> deleteMusic(@PathVariable String id) {
         musicService.deleteMusic(id);
+        return ResponseEntity.noContent().build();
     }
 }
