@@ -6,9 +6,10 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Document(collection = "music")
 @Data
@@ -33,12 +34,25 @@ public class Music {
     @Min(value = 1800, message = "O ano de lançamento deve ser maior que 1800.")
     private int releaseYear;
 
-    private LocalDate releaseDate; 
+    private LocalDate releaseDate;
     private List<String> genre;
-    private List<String> featuredArtists; 
-    private boolean isExplicit; 
-
+    private List<String> featuredArtists;
+    private boolean isExplicit;
     private double duration;
     private double rating;
     private String lyrics;
+    private BigDecimal price; 
+    private String albumCover; 
+    private Instant createdAt; 
+    private AudioQuality audioQuality;
+    public enum AudioQuality {
+        LOW, MEDIUM, HIGH, LOSSLESS
+    }
+
+    //private boolean isPremium; // Nova flag de status
+    //private Set<String> tags; // Conjunto de etiquetas únicas, ex: "Pop", "Clássico"
+    //private LocalTime duration;
+    //private Map<String, String> metadata; // Informações adicionais, como "produção", "gravação"
+
+
 }

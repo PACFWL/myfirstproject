@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +27,15 @@ public class InitialMusicSetup {
                                 .releaseYear(2021)
                                 .releaseDate(LocalDate.of(2021, 5, 20))
                                 .genre(Arrays.asList("Pop", "Dance"))
-                                .featuredArtists(Arrays.asList("Featured Artist A","Cantor A"))
+                                .featuredArtists(Arrays.asList("Featured Artist A", "Cantor A"))
                                 .isExplicit(false)
                                 .duration(3.5)
                                 .rating(8.2)
                                 .lyrics("Sample lyrics for Song 1...")
+                                .price(new BigDecimal("1.99"))
+                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/8/8d/Hybrid-Theory.jpg/revision/latest?cb=20180725161404")
+                                .createdAt(Instant.now())
+                                .audioQuality(Music.AudioQuality.HIGH)
                                 .build(),
 
                         Music.builder()
@@ -44,6 +50,10 @@ public class InitialMusicSetup {
                                 .duration(4.2)
                                 .rating(9.0)
                                 .lyrics("Sample lyrics for Song 2...")
+                                .price(new BigDecimal("2.49"))
+                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/a/a1/M2M.jpg/revision/latest?cb=20180725161555")
+                                .createdAt(Instant.now())
+                                .audioQuality(Music.AudioQuality.LOSSLESS)
                                 .build(),
 
                         Music.builder()
@@ -58,6 +68,10 @@ public class InitialMusicSetup {
                                 .duration(5.0)
                                 .rating(7.5)
                                 .lyrics("Sample lyrics for Song 3...")
+                                .price(new BigDecimal("3.99"))
+                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/b/bf/Meteora.jpg/revision/latest?cb=20180725161334")
+                                .createdAt(Instant.now())
+                                .audioQuality(Music.AudioQuality.MEDIUM)
                                 .build()
                 );
 

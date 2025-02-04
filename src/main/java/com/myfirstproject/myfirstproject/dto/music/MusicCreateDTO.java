@@ -1,14 +1,16 @@
-package com.myfirstproject.myfirstproject.dto;
+package com.myfirstproject.myfirstproject.dto.music;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myfirstproject.myfirstproject.model.Music.AudioQuality;
 
 @Data
 @NoArgsConstructor
@@ -39,4 +41,7 @@ public class MusicCreateDTO {
     private double duration;
     private double rating;
     private String lyrics;
+    private BigDecimal price;
+    private String albumCover;
+    private AudioQuality audioQuality;
 }

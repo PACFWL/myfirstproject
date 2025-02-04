@@ -1,9 +1,12 @@
-package com.myfirstproject.myfirstproject.dto;
+package com.myfirstproject.myfirstproject.dto.music;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import com.myfirstproject.myfirstproject.model.Music.AudioQuality;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +24,7 @@ public class MusicUpdateDTO {
     private Double duration;
     private Double rating;
     private String lyrics;
+    private BigDecimal price;
+    private String albumCover;
+    private AudioQuality audioQuality;
 }
