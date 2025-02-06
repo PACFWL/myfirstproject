@@ -33,7 +33,7 @@ public class InitialMusicSetup {
                                 .rating(8.2)
                                 .lyrics("Sample lyrics for Song 1...")
                                 .price(new BigDecimal("1.99"))
-                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/8/8d/Hybrid-Theory.jpg/revision/latest?cb=20180725161404")
+                                //.albumCover("https://static.wikia.nocookie.net/linkinpark/images/8/8d/Hybrid-Theory.jpg/revision/latest?cb=20180725161404")
                                 .createdAt(Instant.now())
                                 .audioQuality(Music.AudioQuality.HIGH)
                                 .build(),
@@ -51,7 +51,7 @@ public class InitialMusicSetup {
                                 .rating(9.0)
                                 .lyrics("Sample lyrics for Song 2...")
                                 .price(new BigDecimal("2.49"))
-                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/a/a1/M2M.jpg/revision/latest?cb=20180725161555")
+                               // .albumCover("https://static.wikia.nocookie.net/linkinpark/images/a/a1/M2M.jpg/revision/latest?cb=20180725161555")
                                 .createdAt(Instant.now())
                                 .audioQuality(Music.AudioQuality.LOSSLESS)
                                 .build(),
@@ -69,7 +69,7 @@ public class InitialMusicSetup {
                                 .rating(7.5)
                                 .lyrics("Sample lyrics for Song 3...")
                                 .price(new BigDecimal("3.99"))
-                                .albumCover("https://static.wikia.nocookie.net/linkinpark/images/b/bf/Meteora.jpg/revision/latest?cb=20180725161334")
+                                //.albumCover("https://static.wikia.nocookie.net/linkinpark/images/b/bf/Meteora.jpg/revision/latest?cb=20180725161334")
                                 .createdAt(Instant.now())
                                 .audioQuality(Music.AudioQuality.MEDIUM)
                                 .build()

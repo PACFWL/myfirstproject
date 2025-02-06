@@ -43,6 +43,10 @@ public class MusicService {
     public MusicDTO createMusic(MusicCreateDTO musicCreateDTO) {
         logger.info("Criando música: {}", musicCreateDTO);
         Music music = MusicMapper.toEntity(musicCreateDTO);
+                
+        if (musicCreateDTO.getAlbumCoverImage() != null) {
+            music.setAlbumCoverImage(musicCreateDTO.getAlbumCoverImage());
+        }//Image
         return MusicMapper.toDTO(musicRepository.save(music));
     }
 
@@ -63,6 +67,10 @@ public class MusicService {
         Music existingMusic = musicRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Música não encontrada"));
         MusicMapper.updateEntityFromDTO(existingMusic, musicUpdateDTO);
+          
+        if (musicUpdateDTO.getAlbumCoverImage() != null) {
+            existingMusic.setAlbumCoverImage(musicUpdateDTO.getAlbumCoverImage());
+        }//Image
         return MusicMapper.toDTO(musicRepository.save(existingMusic));
     }
 
@@ -73,6 +81,20 @@ public class MusicService {
         }
         musicRepository.deleteById(id);
     }
+
+    public byte[] getAlbumCoverImage(String id) {
+        logger.info("Buscando imagem da capa do álbum da música com ID: {}", id);
+        
+        Music music = musicRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Música não encontrada"));
+    
+        if (music.getAlbumCoverImage() == null || music.getAlbumCoverImage().length == 0) {
+            throw new ResponseStatusException(NOT_FOUND, "Imagem da capa do álbum não encontrada");
+        }
+    
+        return music.getAlbumCoverImage();
+    }//Image
+    
     
     public List<MusicDTO> getMusicByGenre(List<String> genres) {
         logger.info("Buscando músicas dos gêneros: {}", genres);

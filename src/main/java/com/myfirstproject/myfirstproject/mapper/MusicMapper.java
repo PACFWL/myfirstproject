@@ -1,6 +1,7 @@
 package com.myfirstproject.myfirstproject.mapper;
 
 import java.time.Instant;
+import java.util.Base64;
 
 import com.myfirstproject.myfirstproject.dto.music.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
@@ -10,6 +11,9 @@ import com.myfirstproject.myfirstproject.model.Music;
 public class MusicMapper {
 
     public static MusicDTO toDTO(Music music) {
+        String albumCoverBase64 = (music.getAlbumCoverImage() != null) 
+        ? Base64.getEncoder().encodeToString(music.getAlbumCoverImage()) 
+        : null;//Image
         return MusicDTO.builder()
                 .title(music.getTitle())
                 .artist(music.getArtist())
@@ -23,7 +27,7 @@ public class MusicMapper {
                 .rating(music.getRating())
                 .lyrics(music.getLyrics())
                 .price(music.getPrice())
-                .albumCover(music.getAlbumCover())
+                .albumCoverImage(albumCoverBase64)//Image
                 .createdAt(music.getCreatedAt())
                 .audioQuality(music.getAudioQuality())
                 .build();
@@ -43,7 +47,7 @@ public class MusicMapper {
                 .rating(dto.getRating())
                 .lyrics(dto.getLyrics())
                 .price(dto.getPrice())
-                .albumCover(dto.getAlbumCover())
+                .albumCoverImage(dto.getAlbumCoverImage())//Image
                 .audioQuality(dto.getAudioQuality())
                 .createdAt(Instant.now()) 
                 .build();
@@ -60,9 +64,9 @@ public class MusicMapper {
         if (dto.getIsExplicit() != null) music.setExplicit(dto.getIsExplicit());
         if (dto.getDuration() != null) music.setDuration(dto.getDuration());
         if (dto.getRating() != null) music.setRating(dto.getRating());
-        if (dto.getLyrics() != null) music.setLyrics(dto.getLyrics());
+        if (dto.getLyrics() != null) music.setLyrics(dto.getLyrics());       
         if (dto.getPrice() != null) music.setPrice(dto.getPrice());
-        if (dto.getAlbumCover() != null) music.setAlbumCover(dto.getAlbumCover());
+        if (dto.getAlbumCoverImage() != null) music.setAlbumCoverImage(dto.getAlbumCoverImage());//Image
         if (dto.getAudioQuality() != null) music.setAudioQuality(dto.getAudioQuality());
     }
 }

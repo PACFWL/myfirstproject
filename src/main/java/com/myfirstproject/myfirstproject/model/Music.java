@@ -1,5 +1,6 @@
 package com.myfirstproject.myfirstproject.model;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -41,18 +42,16 @@ public class Music {
     private double duration;
     private double rating;
     private String lyrics;
-    private BigDecimal price; 
-    private String albumCover; 
+    private BigDecimal price;
+    @Lob
+    private byte[] albumCoverImage;
     private Instant createdAt; 
     private AudioQuality audioQuality;
     public enum AudioQuality {
-        LOW, MEDIUM, HIGH, LOSSLESS
-    }
-
+        UNKNOWN, LOW, MEDIUM, HIGH, LOSSLESS
+    }    
     //private boolean isPremium; // Nova flag de status
     //private Set<String> tags; // Conjunto de etiquetas únicas, ex: "Pop", "Clássico"
     //private LocalTime duration;
     //private Map<String, String> metadata; // Informações adicionais, como "produção", "gravação"
-
-
 }

@@ -42,6 +42,6 @@ public class MusicCreateDTO {
     private double rating;
     private String lyrics;
     private BigDecimal price;
-    private String albumCover;
+    private byte[] albumCoverImage;
     private AudioQuality audioQuality;
 }

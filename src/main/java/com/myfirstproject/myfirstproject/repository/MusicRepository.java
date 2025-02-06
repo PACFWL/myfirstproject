@@ -106,6 +106,6 @@ public interface MusicRepository extends MongoRepository<Music, String> { //Este
     List<Music> findByPriceGreaterThan(BigDecimal price);
     List<Music> findByAudioQuality(AudioQuality audioQuality);
     List<Music> findByCreatedAtAfter(Instant createdAt);
-    List<Music> findByAlbumCoverIsNotNull();
-    List<Music> findByAlbumCoverIsNull();
+    List<Music> findByAlbumCoverImageIsNotNull();
+    List<Music> findByAlbumCoverImageIsNull();
 }

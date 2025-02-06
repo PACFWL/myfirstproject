@@ -25,7 +25,7 @@ public class MusicDTO {
     private double rating;
     private String lyrics;
     private BigDecimal price;
-    private String albumCover;
+    private String albumCoverImage;
     private Instant createdAt;
     private AudioQuality audioQuality;
 }

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.myfirstproject.myfirstproject.dto.ArtistDTO;
+import com.myfirstproject.myfirstproject.dto.artist.ArtistDTO;
 import com.myfirstproject.myfirstproject.model.Artist;
 import com.myfirstproject.myfirstproject.service.ArtistService;
 

@@ -10,6 +10,9 @@ import com.myfirstproject.myfirstproject.service.music.MusicService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
+import java.io.IOException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -48,11 +51,22 @@ public class MusicController {
     }
 
     
-    @PostMapping
-    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicDTO> createMusic(
+            @RequestPart("music") @Valid MusicCreateDTO musicCreateDTO,
+            @RequestPart("albumCoverImage") MultipartFile albumCoverImage
+    ) throws IOException {
+        musicCreateDTO.setAlbumCoverImage(albumCoverImage.getBytes());
         return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
     }
 
+    /*
+         @PostMapping
+    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
+        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
+    }
+     */
+    
     @GetMapping("/{id}")
     public ResponseEntity<MusicDTO> getMusicById(@PathVariable String id) {
         return musicService.getMusicById(id)
@@ -65,16 +79,45 @@ public class MusicController {
         return ResponseEntity.ok(musicService.getAllMusic());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicDTO> updateMusic(
+            @PathVariable String id,
+            @RequestPart("music") @Valid MusicUpdateDTO musicUpdateDTO,
+            @RequestPart(value = "albumCoverImage", required = false) MultipartFile albumCoverImage) throws IOException {
+        
+        if (albumCoverImage != null) {
+            musicUpdateDTO.setAlbumCoverImage(albumCoverImage.getBytes());
+        }
+
+        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
+    }
+
+/*
+     @PutMapping("/{id}")
     public ResponseEntity<MusicDTO> updateMusic(@PathVariable String id, @Valid @RequestBody MusicUpdateDTO musicUpdateDTO) {
         return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
     }
+  
+ */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMusic(@PathVariable String id) {
         musicService.deleteMusic(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/album-cover")
+    public ResponseEntity<byte[]> getAlbumCover(@PathVariable String id) {
+        byte[] albumCoverImage = musicService.getAlbumCoverImage(id);
+
+        if (albumCoverImage == null || albumCoverImage.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) 
+                .body(albumCoverImage);
+    }//Image
 
     @GetMapping("/by-genres")
     public ResponseEntity<List<MusicDTO>> getMusicByGenres(@RequestParam List<String> genres) {

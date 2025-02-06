@@ -25,6 +25,6 @@ public class MusicUpdateDTO {
     private Double rating;
     private String lyrics;
     private BigDecimal price;
-    private String albumCover;
+    private byte[] albumCoverImage;
     private AudioQuality audioQuality;
 }

@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import com.myfirstproject.myfirstproject.dto.ArtistDTO;
+
+import com.myfirstproject.myfirstproject.dto.artist.ArtistDTO;
 import com.myfirstproject.myfirstproject.model.Artist;
 import com.myfirstproject.myfirstproject.repository.ArtistRepository;
 
