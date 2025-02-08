@@ -2,16 +2,24 @@ package com.myfirstproject.myfirstproject.service.music;
 
 import com.myfirstproject.myfirstproject.dto.music.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
+import com.myfirstproject.myfirstproject.dto.music.MusicPageDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicUpdateDTO;
 import com.myfirstproject.myfirstproject.mapper.MusicMapper;
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.repository.MusicRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -40,15 +48,23 @@ public class MusicService {
         return musicSearchService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, audioQuality, createdAfter);
     }
     
-    public MusicDTO createMusic(MusicCreateDTO musicCreateDTO) {
-        logger.info("Criando música: {}", musicCreateDTO);
-        Music music = MusicMapper.toEntity(musicCreateDTO);
-                
-        if (musicCreateDTO.getAlbumCoverImage() != null) {
-            music.setAlbumCoverImage(musicCreateDTO.getAlbumCoverImage());
-        }//Image
-        return MusicMapper.toDTO(musicRepository.save(music));
+public MusicDTO createMusic(MusicCreateDTO musicCreateDTO, MultipartFile albumCoverImage) {
+    logger.info("Criando música: {}", musicCreateDTO);
+
+    Music music = MusicMapper.toEntity(musicCreateDTO);
+
+    if (albumCoverImage != null && !albumCoverImage.isEmpty()) {
+        try {
+            music.setAlbumCoverImage(albumCoverImage.getBytes());
+            logger.info("Imagem da capa do álbum foi armazenada.");
+        } catch (IOException e) {
+            logger.error("Erro ao processar a imagem da capa do álbum.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a imagem");
+        }
     }
+
+    return MusicMapper.toDTO(musicRepository.save(music));
+}
 
     public Optional<MusicDTO> getMusicById(String id) {
         logger.info("Buscando música com ID: {}", id);
@@ -62,15 +78,23 @@ public class MusicService {
                 .collect(Collectors.toList());
     }
 
-    public MusicDTO updateMusic(String id, MusicUpdateDTO musicUpdateDTO) {
+    public MusicDTO updateMusic(String id, MusicUpdateDTO musicUpdateDTO, MultipartFile albumCoverImage) {
         logger.info("Atualizando música com ID: {}", id);
         Music existingMusic = musicRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Música não encontrada"));
+    
         MusicMapper.updateEntityFromDTO(existingMusic, musicUpdateDTO);
-          
-        if (musicUpdateDTO.getAlbumCoverImage() != null) {
-            existingMusic.setAlbumCoverImage(musicUpdateDTO.getAlbumCoverImage());
-        }//Image
+    
+        if (albumCoverImage != null && !albumCoverImage.isEmpty()) {
+            try {
+                existingMusic.setAlbumCoverImage(albumCoverImage.getBytes());
+                logger.info("Imagem da capa do álbum foi atualizada.");
+            } catch (IOException e) {
+                logger.error("Erro ao processar a imagem da capa do álbum.", e);
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a imagem");
+            }
+        }
+    
         return MusicMapper.toDTO(musicRepository.save(existingMusic));
     }
 
@@ -95,7 +119,42 @@ public class MusicService {
         return music.getAlbumCoverImage();
     }//Image
     
+    public MusicPageDTO getAllMusicPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Music> musicPage = musicRepository.findAll(pageable);
+
+        List<MusicDTO> musicDTOList = musicPage.getContent().stream()
+                .map(MusicMapper::toDTO)
+                .collect(Collectors.toList());
+
+        return new MusicPageDTO(
+                musicDTOList,
+                musicPage.getNumber(),
+                musicPage.getSize(),
+                musicPage.getTotalElements(),
+                musicPage.getTotalPages(),
+                musicPage.isLast()
+        );
+    }
+
+    public MusicPageDTO advancedSearchPaged(String artist, String album, List<String> genres, Integer releaseYear,
+        Double minRating, Integer afterYear, Boolean isExplicit,
+        Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
+        Music.AudioQuality audioQuality, Instant createdAfter, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MusicDTO> musicPage = musicSearchService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, pageable);
+
+        return new MusicPageDTO(
+        musicPage.getContent(),
+        musicPage.getNumber(),
+        musicPage.getSize(),
+        musicPage.getTotalElements(),
+        musicPage.getTotalPages(),
+        musicPage.isLast()
+        );
+    }
     
+
     public List<MusicDTO> getMusicByGenre(List<String> genres) {
         logger.info("Buscando músicas dos gêneros: {}", genres);
         return musicRepository.findByGenreIn(genres).stream()
@@ -137,5 +196,6 @@ public class MusicService {
                 .map(MusicMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 
 }

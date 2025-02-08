@@ -2,6 +2,7 @@ package com.myfirstproject.myfirstproject.controller.music;
 
 import com.myfirstproject.myfirstproject.dto.music.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
+import com.myfirstproject.myfirstproject.dto.music.MusicPageDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicUpdateDTO;
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.service.music.MusicSearchService;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
-import java.io.IOException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -54,10 +54,8 @@ public class MusicController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MusicDTO> createMusic(
             @RequestPart("music") @Valid MusicCreateDTO musicCreateDTO,
-            @RequestPart("albumCoverImage") MultipartFile albumCoverImage
-    ) throws IOException {
-        musicCreateDTO.setAlbumCoverImage(albumCoverImage.getBytes());
-        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
+            @RequestPart(value = "albumCoverImage", required = false) MultipartFile albumCoverImage) {
+        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO, albumCoverImage));
     }
 
     /*
@@ -83,13 +81,8 @@ public class MusicController {
     public ResponseEntity<MusicDTO> updateMusic(
             @PathVariable String id,
             @RequestPart("music") @Valid MusicUpdateDTO musicUpdateDTO,
-            @RequestPart(value = "albumCoverImage", required = false) MultipartFile albumCoverImage) throws IOException {
-        
-        if (albumCoverImage != null) {
-            musicUpdateDTO.setAlbumCoverImage(albumCoverImage.getBytes());
-        }
-
-        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
+            @RequestPart(value = "albumCoverImage", required = false) MultipartFile albumCoverImage) {
+        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO, albumCoverImage));
     }
 
 /*
@@ -118,6 +111,34 @@ public class MusicController {
                 .contentType(MediaType.IMAGE_JPEG) 
                 .body(albumCoverImage);
     }//Image
+
+    @GetMapping("/paged")
+    public ResponseEntity<MusicPageDTO> getAllMusicPaged(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(musicService.getAllMusicPaged(page, size));
+    }
+
+    @GetMapping("/search/paged")
+    public MusicPageDTO searchPaged(@RequestParam(required = false) String artist,
+                                    @RequestParam(required = false) String album,
+                                    @RequestParam(required = false) List<String> genres,
+                                    @RequestParam(required = false) Integer releaseYear,
+                                    @RequestParam(required = false) Double minRating,
+                                    @RequestParam(required = false) Integer afterYear,
+                                    @RequestParam(required = false) Boolean isExplicit,
+                                    @RequestParam(required = false) Boolean noLyrics,
+                                    @RequestParam(required = false) String featuringArtist,
+                                    @RequestParam(required = false) BigDecimal maxPrice,
+                                    @RequestParam(required = false) Boolean hasAlbumCover,
+                                    @RequestParam(required = false) Music.AudioQuality audioQuality,
+                                    @RequestParam(required = false) Instant createdAfter,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size) {
+        return musicService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, page, size);
+    }
+    
+
 
     @GetMapping("/by-genres")
     public ResponseEntity<List<MusicDTO>> getMusicByGenres(@RequestParam List<String> genres) {

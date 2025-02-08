@@ -2,6 +2,8 @@ package com.myfirstproject.myfirstproject.mapper;
 
 import java.time.Instant;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.myfirstproject.myfirstproject.dto.music.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
@@ -69,6 +71,11 @@ public class MusicMapper {
         if (dto.getAlbumCoverImage() != null) music.setAlbumCoverImage(dto.getAlbumCoverImage());//Image
         if (dto.getAudioQuality() != null) music.setAudioQuality(dto.getAudioQuality());
     }
+    
+    public static List<MusicDTO> toDTOList(List<Music> musicList) {
+        return musicList.stream().map(MusicMapper::toDTO).collect(Collectors.toList());
+    }
+
 }
 
 

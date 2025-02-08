@@ -3,6 +3,8 @@ package com.myfirstproject.myfirstproject.repository;
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.model.Music.AudioQuality;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +26,7 @@ public interface MusicRepository extends MongoRepository<Music, String> { //Este
     musicRepository.save(music); → Salva um novo registro
     musicRepository.deleteById(id); → Remove uma música pelo ID
 **/
-    
+   
     List<Music> findByReleaseYear(Integer releaseYear);
     List<Music> findByArtist(String artist);
     List<Music> findByAlbum(String album);
@@ -108,4 +110,10 @@ public interface MusicRepository extends MongoRepository<Music, String> { //Este
     List<Music> findByCreatedAtAfter(Instant createdAt);
     List<Music> findByAlbumCoverImageIsNotNull();
     List<Music> findByAlbumCoverImageIsNull();
+    Page<Music> findByAlbumCoverImageIsNotNull(Pageable pageable);
+    Page<Music> findByAlbumCoverImageIsNull(Pageable pageable);
+    Page<Music> findByReleaseYear(Integer releaseYear, Pageable pageable);
+    Page<Music> findByRatingGreaterThanEqual(Double rating, Pageable pageable);
+    Page<Music> findByDurationGreaterThanEqual(Double duration, Pageable pageable);
+    
 }
