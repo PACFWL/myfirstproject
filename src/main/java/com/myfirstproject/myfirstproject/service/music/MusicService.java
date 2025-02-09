@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -48,6 +50,14 @@ public class MusicService {
         return musicSearchService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, audioQuality, createdAfter);
     }
     
+    public List<MusicDTO> getMusicByTags(Set<String> tags) {
+        logger.info("Buscando músicas com as tags: {}", tags);
+        return musicRepository.findByTagsIn(tags).stream()
+                .map(MusicMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
 public MusicDTO createMusic(MusicCreateDTO musicCreateDTO, MultipartFile albumCoverImage) {
     logger.info("Criando música: {}", musicCreateDTO);
 
@@ -94,6 +104,7 @@ public MusicDTO createMusic(MusicCreateDTO musicCreateDTO, MultipartFile albumCo
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a imagem");
             }
         }
+        existingMusic.setLastModifiedAt(Instant.now()); 
     
         return MusicMapper.toDTO(musicRepository.save(existingMusic));
     }
@@ -140,9 +151,9 @@ public MusicDTO createMusic(MusicCreateDTO musicCreateDTO, MultipartFile albumCo
     public MusicPageDTO advancedSearchPaged(String artist, String album, List<String> genres, Integer releaseYear,
         Double minRating, Integer afterYear, Boolean isExplicit,
         Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
-        Music.AudioQuality audioQuality, Instant createdAfter, int page, int size) {
+        Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, Map<String, String> metadata, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<MusicDTO> musicPage = musicSearchService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, pageable);
+        Page<MusicDTO> musicPage = musicSearchService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata, pageable);
 
         return new MusicPageDTO(
         musicPage.getContent(),

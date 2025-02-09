@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -45,13 +46,16 @@ public class Music {
     private BigDecimal price;
     @Lob
     private byte[] albumCoverImage;
-    private Instant createdAt; 
+   
     private AudioQuality audioQuality;
     public enum AudioQuality {
         UNKNOWN, LOW, MEDIUM, HIGH, LOSSLESS
     }    
-    //private boolean isPremium; // Nova flag de status
-    //private Set<String> tags; // Conjunto de etiquetas únicas, ex: "Pop", "Clássico"
+    private Set<String> tags; 
+    private Map<String, String> metadata; 
+    private Instant createdAt; 
+    @LastModifiedDate
+    private Instant lastModifiedAt;
+    //private boolean isPremium; //Flag de status
     //private LocalTime duration;
-    //private Map<String, String> metadata; // Informações adicionais, como "produção", "gravação"
 }

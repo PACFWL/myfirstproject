@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Set;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -115,5 +116,5 @@ public interface MusicRepository extends MongoRepository<Music, String> { //Este
     Page<Music> findByReleaseYear(Integer releaseYear, Pageable pageable);
     Page<Music> findByRatingGreaterThanEqual(Double rating, Pageable pageable);
     Page<Music> findByDurationGreaterThanEqual(Double duration, Pageable pageable);
-    
+    List<Music> findByTagsIn(Set<String> tags);
 }

@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/music")
@@ -133,9 +135,11 @@ public class MusicController {
                                     @RequestParam(required = false) Boolean hasAlbumCover,
                                     @RequestParam(required = false) Music.AudioQuality audioQuality,
                                     @RequestParam(required = false) Instant createdAfter,
+                                    @RequestParam(required = false) Set<String> tags, 
+                                    @RequestParam(required = false) Map<String, String> metadata, 
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10") int size) {
-        return musicService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, page, size);
+        return musicService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata, page, size);
     }
     
 

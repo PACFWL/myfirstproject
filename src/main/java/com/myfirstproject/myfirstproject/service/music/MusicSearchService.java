@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +58,7 @@ public class MusicSearchService {
     public Page<MusicDTO> advancedSearchPaged(String artist, String album, List<String> genres, Integer releaseYear,
                                             Double minRating, Integer afterYear, Boolean isExplicit,
                                             Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover, 
-                                            Music.AudioQuality audioQuality, Instant createdAfter, Pageable pageable) {
+                                            Music.AudioQuality audioQuality, Instant createdAfter,  Set<String> tags, Map<String, String> metadata, Pageable pageable) {
         Query query = new Query();
 
         if (artist != null) query.addCriteria(Criteria.where("artist").is(artist));
@@ -78,7 +80,18 @@ public class MusicSearchService {
         };
         if (audioQuality != null) query.addCriteria(Criteria.where("audioQuality").is(audioQuality));
         if (createdAfter != null) query.addCriteria(Criteria.where("createdAt").gt(createdAfter));
+        
+        // Filtro para tags (verifica se há pelo menos uma tag correspondente)
+        if (tags != null && !tags.isEmpty()) {
+            query.addCriteria(Criteria.where("tags").in(tags));
+        }
 
+        // Filtro para metadata (verifica se a chave e o valor batem)
+        if (metadata != null && !metadata.isEmpty()) {
+            metadata.forEach((key, value) -> {
+                query.addCriteria(Criteria.where("metadata." + key).is(value));
+            });
+        }
         long total = mongoTemplate.count(query, Music.class);
         
         query.with(pageable); 

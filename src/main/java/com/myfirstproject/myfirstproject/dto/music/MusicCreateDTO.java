@@ -7,6 +7,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,4 +46,6 @@ public class MusicCreateDTO {
     private BigDecimal price;
     private byte[] albumCoverImage;
     private AudioQuality audioQuality;
+    private Set<String> tags;
+    private Map<String, String> metadata;
 }

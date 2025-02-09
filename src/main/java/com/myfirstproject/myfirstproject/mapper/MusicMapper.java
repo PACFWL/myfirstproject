@@ -32,6 +32,9 @@ public class MusicMapper {
                 .albumCoverImage(albumCoverBase64)//Image
                 .createdAt(music.getCreatedAt())
                 .audioQuality(music.getAudioQuality())
+                .tags(music.getTags())
+                .metadata(music.getMetadata())
+                .lastModifiedAt(music.getLastModifiedAt()) 
                 .build();
     }
 
@@ -51,6 +54,8 @@ public class MusicMapper {
                 .price(dto.getPrice())
                 .albumCoverImage(dto.getAlbumCoverImage())//Image
                 .audioQuality(dto.getAudioQuality())
+                .tags(dto.getTags())
+                .metadata(dto.getMetadata())
                 .createdAt(Instant.now()) 
                 .build();
     }
@@ -70,6 +75,9 @@ public class MusicMapper {
         if (dto.getPrice() != null) music.setPrice(dto.getPrice());
         if (dto.getAlbumCoverImage() != null) music.setAlbumCoverImage(dto.getAlbumCoverImage());//Image
         if (dto.getAudioQuality() != null) music.setAudioQuality(dto.getAudioQuality());
+        if (dto.getTags() != null) music.setTags(dto.getTags());
+        if (dto.getMetadata() != null) music.setMetadata(dto.getMetadata());
+        music.setLastModifiedAt(Instant.now()); 
     }
     
     public static List<MusicDTO> toDTOList(List<Music> musicList) {
