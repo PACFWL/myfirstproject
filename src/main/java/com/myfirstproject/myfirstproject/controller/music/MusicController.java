@@ -60,12 +60,7 @@ public class MusicController {
         return ResponseEntity.ok(musicService.createMusic(musicCreateDTO, albumCoverImage));
     }
 
-    /*
-         @PostMapping
-    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
-        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
-    }
-     */
+
     
     @GetMapping("/{id}")
     public ResponseEntity<MusicDTO> getMusicById(@PathVariable String id) {
@@ -87,32 +82,12 @@ public class MusicController {
         return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO, albumCoverImage));
     }
 
-/*
-     @PutMapping("/{id}")
-    public ResponseEntity<MusicDTO> updateMusic(@PathVariable String id, @Valid @RequestBody MusicUpdateDTO musicUpdateDTO) {
-        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
-    }
-  
- */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMusic(@PathVariable String id) {
         musicService.deleteMusic(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/{id}/album-cover")
-    public ResponseEntity<byte[]> getAlbumCover(@PathVariable String id) {
-        byte[] albumCoverImage = musicService.getAlbumCoverImage(id);
-
-        if (albumCoverImage == null || albumCoverImage.length == 0) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG) 
-                .body(albumCoverImage);
-    }//Image
 
     @GetMapping("/paged")
     public ResponseEntity<MusicPageDTO> getAllMusicPaged(
@@ -142,37 +117,17 @@ public class MusicController {
         return musicService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata, page, size);
     }
     
-
-
-    @GetMapping("/by-genres")
-    public ResponseEntity<List<MusicDTO>> getMusicByGenres(@RequestParam List<String> genres) {
-        return ResponseEntity.ok(musicService.getMusicByGenre(genres));
+/*
+         @PostMapping
+    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
+        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
     }
 
-    @GetMapping("/by-artist")
-    public ResponseEntity<List<MusicDTO>> getMusicByArtist(@RequestParam String artist) {
-    return ResponseEntity.ok(musicService.getMusicByArtist(artist));
+     @PutMapping("/{id}")
+    public ResponseEntity<MusicDTO> updateMusic(@PathVariable String id, @Valid @RequestBody MusicUpdateDTO musicUpdateDTO) {
+        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
     }
-
-    @GetMapping("/by-rating")
-    public ResponseEntity<List<MusicDTO>> getMusicByRating(@RequestParam double rating) {
-        return ResponseEntity.ok(musicService.getMusicByRating(rating));
-    }
-
-    @GetMapping("/by-price")
-    public ResponseEntity<List<MusicDTO>> getMusicByPrice(@RequestParam BigDecimal maxPrice) {
-        return ResponseEntity.ok(musicService.getMusicByPrice(maxPrice));
-    }
-    
-    @GetMapping("/by-audio-quality")
-    public ResponseEntity<List<MusicDTO>> getMusicByAudioQuality(@RequestParam Music.AudioQuality audioQuality) {
-        return ResponseEntity.ok(musicService.getMusicByAudioQuality(audioQuality));
-    }
-    
-    @GetMapping("/by-created-after")
-    public ResponseEntity<List<MusicDTO>> getMusicByCreationDate(@RequestParam Instant createdAfter) {
-        return ResponseEntity.ok(musicService.getMusicByCreationDate(createdAfter));
-    }
-    
-
+  
+ */
 }
+
