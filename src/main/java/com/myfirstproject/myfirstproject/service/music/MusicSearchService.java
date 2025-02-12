@@ -81,12 +81,12 @@ public class MusicSearchService {
         if (audioQuality != null) query.addCriteria(Criteria.where("audioQuality").is(audioQuality));
         if (createdAfter != null) query.addCriteria(Criteria.where("createdAt").gt(createdAfter));
         
-        // Filtro para tags (verifica se há pelo menos uma tag correspondente)
+        
         if (tags != null && !tags.isEmpty()) {
             query.addCriteria(Criteria.where("tags").in(tags));
         }
 
-        // Filtro para metadata (verifica se a chave e o valor batem)
+      
         if (metadata != null && !metadata.isEmpty()) {
             metadata.forEach((key, value) -> {
                 query.addCriteria(Criteria.where("metadata." + key).is(value));

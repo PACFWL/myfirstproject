@@ -15,6 +15,7 @@ import com.myfirstproject.myfirstproject.model.Music.AudioQuality;
 @AllArgsConstructor
 @Builder
 public class MusicDTO {
+    private String id;
     private String title;
     private String artist;
     private String album;

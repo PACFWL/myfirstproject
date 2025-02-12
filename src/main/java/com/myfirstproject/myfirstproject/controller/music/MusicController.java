@@ -2,7 +2,6 @@ package com.myfirstproject.myfirstproject.controller.music;
 
 import com.myfirstproject.myfirstproject.dto.music.MusicCreateDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
-import com.myfirstproject.myfirstproject.dto.music.MusicPageDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicUpdateDTO;
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.service.music.MusicSearchService;
@@ -16,16 +15,19 @@ import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 @RestController
 @RequestMapping("/api/music")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MusicController {
 
     private final MusicService musicService;
     private final MusicSearchService musicSearchService;
+    
 
     public MusicController(MusicService musicService, MusicSearchService musicSearchService) {
         this.musicService = musicService;
@@ -83,40 +85,20 @@ public class MusicController {
     }
 
 
+ 
     @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteMusic(@PathVariable String id) {
+        musicService.deleteMusic(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Music deleted successfully");
+        return ResponseEntity.ok(response);
+    }
+/* @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMusic(@PathVariable String id) {
         musicService.deleteMusic(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/paged")
-    public ResponseEntity<MusicPageDTO> getAllMusicPaged(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(musicService.getAllMusicPaged(page, size));
-    }
-
-    @GetMapping("/search/paged")
-    public MusicPageDTO searchPaged(@RequestParam(required = false) String artist,
-                                    @RequestParam(required = false) String album,
-                                    @RequestParam(required = false) List<String> genres,
-                                    @RequestParam(required = false) Integer releaseYear,
-                                    @RequestParam(required = false) Double minRating,
-                                    @RequestParam(required = false) Integer afterYear,
-                                    @RequestParam(required = false) Boolean isExplicit,
-                                    @RequestParam(required = false) Boolean noLyrics,
-                                    @RequestParam(required = false) String featuringArtist,
-                                    @RequestParam(required = false) BigDecimal maxPrice,
-                                    @RequestParam(required = false) Boolean hasAlbumCover,
-                                    @RequestParam(required = false) Music.AudioQuality audioQuality,
-                                    @RequestParam(required = false) Instant createdAfter,
-                                    @RequestParam(required = false) Set<String> tags, 
-                                    @RequestParam(required = false) Map<String, String> metadata, 
-                                    @RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "10") int size) {
-        return musicService.advancedSearchPaged(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata, page, size);
-    }
-    
+*/   
 /*
          @PostMapping
     public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {

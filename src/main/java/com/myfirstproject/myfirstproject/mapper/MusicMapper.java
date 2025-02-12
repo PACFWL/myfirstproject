@@ -17,6 +17,7 @@ public class MusicMapper {
         ? Base64.getEncoder().encodeToString(music.getAlbumCoverImage()) 
         : null;//Image
         return MusicDTO.builder()
+                .id(music.getId())
                 .title(music.getTitle())
                 .artist(music.getArtist())
                 .album(music.getAlbum())
