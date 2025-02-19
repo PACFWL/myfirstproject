@@ -1,0 +1,40 @@
+package com.myfirstproject.myfirstproject.mapper;
+
+import com.myfirstproject.myfirstproject.dto.user.UserCreateDTO;
+import com.myfirstproject.myfirstproject.dto.user.UserDTO;
+import com.myfirstproject.myfirstproject.dto.user.UserUpdateDTO;
+import com.myfirstproject.myfirstproject.model.User;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UserMapper {
+
+    public static UserDTO toDTO(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
+    }
+
+    public static User toEntity(UserCreateDTO dto) {
+        return User.builder()
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .role(User.Role.valueOf(dto.getRole().toUpperCase()))
+                .createdAt(Instant.now())
+                .build();
+    }
+
+    public static void updateEntityFromDTO(User user, UserUpdateDTO dto) {
+        if (dto.getEmail() != null) user.setEmail(dto.getEmail());
+        if (dto.getRole() != null) user.setRole(User.Role.valueOf(dto.getRole().toUpperCase()));
+        user.setLastModifiedAt(Instant.now());
+    }
+
+    public static List<UserDTO> toDTOList(List<User> userList) {
+        return userList.stream().map(UserMapper::toDTO).collect(Collectors.toList());
+    }
+}

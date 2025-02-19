@@ -1,47 +1,41 @@
 package com.myfirstproject.myfirstproject.model;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Document(collection = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
-    private String id;
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
+
+    @NotBlank(message = "O e-mail é obrigatório.")
     private String email;
+
+    @NotBlank(message = "A senha é obrigatória.")
     private String password;
 
-    // Construtores
-    public User() {}
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    public enum Role {
+        ADMIN, USER
     }
 
-    // Getters e Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private Instant createdAt;
+    
+    @LastModifiedDate
+    private Instant lastModifiedAt;
 }
-
