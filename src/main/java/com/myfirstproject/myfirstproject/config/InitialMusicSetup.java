@@ -1,4 +1,4 @@
-package com.myfirstproject.myfirstproject;
+package com.myfirstproject.myfirstproject.config;
 
 import com.myfirstproject.myfirstproject.model.Music;
 import com.myfirstproject.myfirstproject.repository.MusicRepository;
