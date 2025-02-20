@@ -21,8 +21,8 @@ import java.util.Collections;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "*******************************";
-
+    private static final String SECRET_KEY = System.getenv("SECRET_KEY");
+    
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }

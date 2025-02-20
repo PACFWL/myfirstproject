@@ -27,7 +27,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private static final String SECRET_KEY = "***************************";
+    private static final String SECRET_KEY = System.getenv("SECRET_KEY");
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
