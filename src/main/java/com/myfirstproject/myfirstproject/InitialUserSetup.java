@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration
@@ -17,27 +18,29 @@ public class InitialUserSetup {
     @Bean
     CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            if (userRepository.findByEmail("abcdef@example.com").isEmpty()) {
-                User admin = User.builder()
+            if (userRepository.count() == 0) { 
+                List<User> users = List.of(
+                    User.builder()
                         .id(UUID.randomUUID().toString())
                         .email("abcdef@example.com")
-                        .password(passwordEncoder.encode("admin123"))  
+                        .password(passwordEncoder.encode("admin123")) 
                         .role(User.Role.ADMIN)
                         .createdAt(Instant.now())
                         .lastModifiedAt(Instant.now())
-                        .build();
-
-                User user = User.builder()
+                        .build(),
+                    
+                    User.builder()
                         .id(UUID.randomUUID().toString())
                         .email("teste@gmail.com")
                         .password(passwordEncoder.encode("Qwerty")) 
                         .role(User.Role.USER)
                         .createdAt(Instant.now())
                         .lastModifiedAt(Instant.now())
-                        .build();
+                        .build()
+                );
 
-                userRepository.save(admin);
-                userRepository.save(user);
+                userRepository.saveAll(users);
+                System.out.println("Usuários iniciais criados!");
             }
         };
     }

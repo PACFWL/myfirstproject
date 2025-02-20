@@ -27,8 +27,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final String SECRET_KEY = "***************************";
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
+    
     public UserDTO createUser(UserCreateDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
 
@@ -65,15 +71,14 @@ public class UserService {
         throw new RuntimeException("Invalid email or password");
     }
 
-    private String generateToken(User user) {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        return Jwts.builder()
-                .setSubject(user.getEmail())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) 
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
+ private String generateToken(User user) {
+    return Jwts.builder()
+            .setSubject(user.getEmail())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
+}
     
     public List<UserDTO> getUsersByRole(String role) {
         return userRepository.findByRole(User.Role.valueOf(role.toUpperCase())).stream()
