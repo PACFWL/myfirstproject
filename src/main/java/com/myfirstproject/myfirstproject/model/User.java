@@ -22,6 +22,9 @@ public class User {
     @Builder.Default
     private String id = UUID.randomUUID().toString();
 
+    @NotBlank(message = "O nome é obrigatório.")
+    private String name;
+
     @NotBlank(message = "O e-mail é obrigatório.")
     private String email;
 

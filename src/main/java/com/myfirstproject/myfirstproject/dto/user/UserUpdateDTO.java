@@ -8,6 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserUpdateDTO {
+
+    @NotBlank(message = "O nome é obrigatório.")
+    private String name;
     
     @NotBlank(message = "O e-mail é obrigatório.")
     private String email;

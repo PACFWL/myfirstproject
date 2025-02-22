@@ -1,5 +1,5 @@
 
-package com.myfirstproject.myfirstproject.service;
+package com.myfirstproject.myfirstproject.service.user;
 
 import com.myfirstproject.myfirstproject.dto.user.UserCreateDTO;
 import com.myfirstproject.myfirstproject.dto.user.UserDTO;
@@ -8,9 +8,13 @@ import com.myfirstproject.myfirstproject.dto.user.UserUpdateDTO;
 import com.myfirstproject.myfirstproject.mapper.UserMapper;
 import com.myfirstproject.myfirstproject.model.User;
 import com.myfirstproject.myfirstproject.repository.UserRepository;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.security.Key;
@@ -24,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 public class UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository;
 

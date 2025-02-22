@@ -14,6 +14,7 @@ public class UserMapper {
     public static UserDTO toDTO(User user) {
         return UserDTO.builder()
                 .id(user.getId())
+                .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .build();
@@ -21,6 +22,7 @@ public class UserMapper {
 
     public static User toEntity(UserCreateDTO dto) {
         return User.builder()
+                .name(dto.getName())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .role(User.Role.valueOf(dto.getRole().toUpperCase()))
@@ -29,6 +31,7 @@ public class UserMapper {
     }
 
     public static void updateEntityFromDTO(User user, UserUpdateDTO dto) {
+        if (dto.getName() != null) user.setName(dto.getName());
         if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         if (dto.getRole() != null) user.setRole(User.Role.valueOf(dto.getRole().toUpperCase()));
         user.setLastModifiedAt(Instant.now());

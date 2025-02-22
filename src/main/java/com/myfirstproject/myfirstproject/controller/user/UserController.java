@@ -4,7 +4,8 @@ import com.myfirstproject.myfirstproject.dto.user.UserCreateDTO;
 import com.myfirstproject.myfirstproject.dto.user.UserDTO;
 import com.myfirstproject.myfirstproject.dto.user.UserLoginDTO;
 import com.myfirstproject.myfirstproject.dto.user.UserUpdateDTO;
-import com.myfirstproject.myfirstproject.service.UserService;
+import com.myfirstproject.myfirstproject.service.user.UserService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired

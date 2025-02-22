@@ -22,6 +22,7 @@ public class InitialUserSetup {
                 List<User> users = List.of(
                     User.builder()
                         .id(UUID.randomUUID().toString())
+                        .name("Teste A")
                         .email("abcdef@example.com")
                         .password(passwordEncoder.encode("admin123")) 
                         .role(User.Role.ADMIN)
@@ -31,6 +32,7 @@ public class InitialUserSetup {
                     
                     User.builder()
                         .id(UUID.randomUUID().toString())
+                        .name("Teste B")
                         .email("teste@gmail.com")
                         .password(passwordEncoder.encode("Qwerty")) 
                         .role(User.Role.USER)
