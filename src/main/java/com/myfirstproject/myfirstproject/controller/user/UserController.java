@@ -12,11 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -28,9 +29,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDTO userDTO) {
-        return ResponseEntity.ok(userService.loginUser(userDTO));
+    public ResponseEntity<?> loginUser(@Valid @RequestBody UserLoginDTO userDTO) {
+    String token = userService.loginUser(userDTO);
+        return ResponseEntity.ok(Map.of("token", token));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
