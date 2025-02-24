@@ -22,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/music")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class MusicController {
 
     private final MusicService musicService;
@@ -93,23 +92,5 @@ public class MusicController {
         response.put("message", "Music deleted successfully");
         return ResponseEntity.ok(response);
     }
-/* @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMusic(@PathVariable String id) {
-        musicService.deleteMusic(id);
-        return ResponseEntity.noContent().build();
-    }
-*/   
-/*
-         @PostMapping
-    public ResponseEntity<MusicDTO> createMusic(@Valid @RequestBody MusicCreateDTO musicCreateDTO) {
-        return ResponseEntity.ok(musicService.createMusic(musicCreateDTO));
-    }
-
-     @PutMapping("/{id}")
-    public ResponseEntity<MusicDTO> updateMusic(@PathVariable String id, @Valid @RequestBody MusicUpdateDTO musicUpdateDTO) {
-        return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO));
-    }
-  
- */
 }
 
