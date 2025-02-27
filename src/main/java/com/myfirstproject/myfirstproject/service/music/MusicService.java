@@ -18,7 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -40,9 +42,10 @@ public class MusicService {
  
     public List<MusicDTO> advancedSearch(String artist, String album, List<String> genres, Integer releaseYear,
                                           Double minRating, Integer afterYear, Boolean isExplicit,
-                                          Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, 
-                                          Music.AudioQuality audioQuality, Instant createdAfter) {
-        return musicSearchService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, maxPrice, audioQuality, createdAfter);
+                                          Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
+                                          Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, Map<String, String> metadata) {
+        return musicSearchService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, 
+                                                maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata);
     }
     
     public MusicDTO createMusic(MusicCreateDTO musicCreateDTO, MultipartFile albumCoverImage) {

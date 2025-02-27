@@ -15,7 +15,7 @@ public class MusicMapper {
     public static MusicDTO toDTO(Music music) {
         String albumCoverBase64 = (music.getAlbumCoverImage() != null) 
         ? Base64.getEncoder().encodeToString(music.getAlbumCoverImage()) 
-        : null;//Image
+        : null;
         return MusicDTO.builder()
                 .id(music.getId())
                 .title(music.getTitle())
@@ -30,7 +30,7 @@ public class MusicMapper {
                 .rating(music.getRating())
                 .lyrics(music.getLyrics())
                 .price(music.getPrice())
-                .albumCoverImage(albumCoverBase64)//Image
+                .albumCoverImage(albumCoverBase64)
                 .createdAt(music.getCreatedAt())
                 .audioQuality(music.getAudioQuality())
                 .tags(music.getTags())
@@ -53,7 +53,7 @@ public class MusicMapper {
                 .rating(dto.getRating())
                 .lyrics(dto.getLyrics())
                 .price(dto.getPrice())
-                .albumCoverImage(dto.getAlbumCoverImage())//Image
+                .albumCoverImage(dto.getAlbumCoverImage())
                 .audioQuality(dto.getAudioQuality())
                 .tags(dto.getTags())
                 .metadata(dto.getMetadata())
@@ -74,7 +74,7 @@ public class MusicMapper {
         if (dto.getRating() != null) music.setRating(dto.getRating());
         if (dto.getLyrics() != null) music.setLyrics(dto.getLyrics());       
         if (dto.getPrice() != null) music.setPrice(dto.getPrice());
-        if (dto.getAlbumCoverImage() != null) music.setAlbumCoverImage(dto.getAlbumCoverImage());//Image
+        if (dto.getAlbumCoverImage() != null) music.setAlbumCoverImage(dto.getAlbumCoverImage());
         if (dto.getAudioQuality() != null) music.setAudioQuality(dto.getAudioQuality());
         if (dto.getTags() != null) music.setTags(dto.getTags());
         if (dto.getMetadata() != null) music.setMetadata(dto.getMetadata());

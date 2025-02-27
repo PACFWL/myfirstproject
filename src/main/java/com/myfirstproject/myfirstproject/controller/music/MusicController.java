@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @RestController
@@ -45,15 +46,17 @@ public class MusicController {
             @RequestParam(required = false) Boolean noLyrics,
             @RequestParam(required = false) String featuringArtist,
             @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Boolean hasAlbumCover,
             @RequestParam(required = false) Music.AudioQuality audioQuality,
-            @RequestParam(required = false) Instant createdAfter) {
+            @RequestParam(required = false) Instant createdAfter,
+            @RequestParam(required = false) Set<String> tags,
+            @RequestParam(required = false) Map<String, String> metadata) {
         return musicSearchService.advancedSearch(
                 artist, album, genres, releaseYear, minRating, afterYear,
-                isExplicit, noLyrics, featuringArtist, maxPrice, audioQuality, createdAfter
-        );
+                isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter,
+                tags, metadata);
     }
 
-    
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MusicDTO> createMusic(
             @RequestPart("music") @Valid MusicCreateDTO musicCreateDTO,
@@ -61,8 +64,6 @@ public class MusicController {
         return ResponseEntity.ok(musicService.createMusic(musicCreateDTO, albumCoverImage));
     }
 
-
-    
     @GetMapping("/{id}")
     public ResponseEntity<MusicDTO> getMusicById(@PathVariable String id) {
         return musicService.getMusicById(id)
@@ -83,8 +84,6 @@ public class MusicController {
         return ResponseEntity.ok(musicService.updateMusic(id, musicUpdateDTO, albumCoverImage));
     }
 
-
- 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteMusic(@PathVariable String id) {
         musicService.deleteMusic(id);
