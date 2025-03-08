@@ -17,8 +17,8 @@ public class ProfileDTO {
     private String socialMediaLink;
     private String location;
     private String website;
-     private Instant dateOfBirth;  // Alterado para Instant
-    private Instant createdAt;    // Alterado para Instant
-    private Instant updatedAt;    // Alterado para Instant
+    private Instant dateOfBirth;  
+    private Instant createdAt;   
+    private Instant updatedAt;   
     private boolean status;
 }

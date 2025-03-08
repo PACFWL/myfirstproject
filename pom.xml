@@ -103,6 +103,20 @@
     		<groupId>org.springframework.security</groupId>
     		<artifactId>spring-security-crypto</artifactId>
 		</dependency>
+		    <!-- Testes do Spring Boot -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Testes de mock para banco de dados (se necessário) -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <scope>test</scope>
+    </dependency>
+
 	</dependencies>
 
 	<build>

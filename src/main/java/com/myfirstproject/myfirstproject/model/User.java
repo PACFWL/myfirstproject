@@ -4,8 +4,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
@@ -25,6 +28,7 @@ public class User {
     @NotBlank(message = "O nome é obrigatório.")
     private String name;
 
+    @Indexed(unique = true)
     @NotBlank(message = "O e-mail é obrigatório.")
     private String email;
 
@@ -37,6 +41,7 @@ public class User {
         ADMIN, USER
     }
 
+    @CreatedDate
     private Instant createdAt;
     
     @LastModifiedDate

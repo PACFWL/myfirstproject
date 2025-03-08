@@ -30,5 +30,5 @@ public class ProfileUpdateDTO {
     @Past(message = "A data de nascimento deve estar no passado.")
     private LocalDateTime dateOfBirth;
 
-    private Boolean status; // Pode ser alterado na atualização
+    private Boolean status; 
 }

@@ -2,8 +2,10 @@ package com.myfirstproject.myfirstproject.model;
 
 import lombok.*;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.*;
@@ -24,7 +26,8 @@ public class Profile {
     private String id = UUID.randomUUID().toString();
 
     @NotBlank(message = "O userId é obrigatório.")
-    private String userId; // Relacionamento com User
+    @Indexed(unique = true) 
+    private String userId; 
 
     @NotBlank(message = "O nome de exibição é obrigatório.")
     @Size(max = 100, message = "O nome de exibição pode ter no máximo 100 caracteres.")
@@ -46,9 +49,10 @@ public class Profile {
 
     @Past(message = "A data de nascimento deve estar no passado.")
     private LocalDateTime dateOfBirth;
-
-    private Instant createdAt;  // Alterado para Instant
-    private Instant updatedAt;  // Alterado para Instant
+    @CreatedDate
+    private Instant createdAt; 
+    @LastModifiedDate
+    private Instant updatedAt; 
 
     @Builder.Default
     private boolean status = true; 

@@ -5,7 +5,6 @@ import com.myfirstproject.myfirstproject.dto.profile.ProfileDTO;
 import com.myfirstproject.myfirstproject.dto.profile.ProfileUpdateDTO;
 import com.myfirstproject.myfirstproject.mapper.ProfileMapper;
 import com.myfirstproject.myfirstproject.model.Profile;
-import com.myfirstproject.myfirstproject.model.User;
 import com.myfirstproject.myfirstproject.repository.ProfileRepository;
 import com.myfirstproject.myfirstproject.repository.UserRepository;
 
@@ -23,24 +22,13 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final ProfileMapper profileMapper;
 
-    // Criar um novo perfil
-    /**public ProfileDTO createProfile(ProfileCreateDTO dto) {
-        Profile profile = profileMapper.toEntity(dto);
-        profile.setCreatedAt(Instant.now());
-        profile.setUpdatedAt(Instant.now());
-        profile.setStatus(true); 
-        Profile savedProfile = profileRepository.save(profile);
-        return profileMapper.toDTO(savedProfile);
-    }**/
-
-    
     public ProfileDTO createProfile(ProfileCreateDTO dto) {
-        // 🔍 Verificar se o usuário existe antes de criar o perfil
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+     
+    if (!userRepository.existsById(dto.getUserId())) {
+                throw new IllegalArgumentException("Usuário não encontrado!");
+    }
         Profile profile = profileMapper.toEntity(dto);
-        profile.setUserId(user.getId()); // Garantindo que o userId pertence a um usuário existente
+        profile.setUserId(dto.getUserId());
         profile.setCreatedAt(Instant.now());
         profile.setUpdatedAt(Instant.now());
         profile.setStatus(true);
@@ -48,7 +36,6 @@ public class ProfileService {
         Profile savedProfile = profileRepository.save(profile);
         return profileMapper.toDTO(savedProfile);
     }
-      
 
     // Buscar um perfil pelo ID
     public ProfileDTO getProfileById(String id) {
@@ -87,7 +74,7 @@ public class ProfileService {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
 
-        profile.setStatus(false); // Soft delete (marcar como inativo)
+        profile.setStatus(false); 
         profile.setUpdatedAt(Instant.now());
         profileRepository.save(profile);
     }
