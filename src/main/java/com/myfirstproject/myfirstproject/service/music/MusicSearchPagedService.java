@@ -9,7 +9,6 @@ import com.myfirstproject.myfirstproject.dto.music.MusicDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicPageDTO;
 import com.myfirstproject.myfirstproject.dto.music.MusicSearchDTO;
 
-
 @Service
 public class MusicSearchPagedService {
 
@@ -48,6 +47,5 @@ public class MusicSearchPagedService {
                 musicPage.getTotalPages(),
                 musicPage.isLast()
         );
-    }
-    
+    } 
 }

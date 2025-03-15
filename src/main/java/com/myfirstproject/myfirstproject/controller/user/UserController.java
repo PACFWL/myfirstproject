@@ -33,7 +33,6 @@ public class UserController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
         Optional<UserDTO> userDTO = userService.getUserById(id);

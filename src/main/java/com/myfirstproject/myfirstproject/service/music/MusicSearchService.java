@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.regex.Pattern;
+
 
 @Service
 public class MusicSearchService {
@@ -33,7 +35,7 @@ public class MusicSearchService {
                                         Double minRating, Integer afterYear, Boolean isExplicit,
                                         Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
                                         Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, 
-                                        Map<String, String> metadata) {
+                                        Map<String, String> metadata, String lyricsKeywords, Boolean exactLyricsMatch) {
         Query query = new Query();
 
         if (artist != null) query.addCriteria(Criteria.where("artist").is(artist));
@@ -64,12 +66,29 @@ public class MusicSearchService {
             });
         }
 
+        if (lyricsKeywords != null) {
+    if (lyricsKeywords.isEmpty()) {
+        query.addCriteria(Criteria.where("lyrics").is("")); 
+    } else {
+        if (exactLyricsMatch != null && exactLyricsMatch) {
+          
+            query.addCriteria(Criteria.where("lyrics").regex(Pattern.quote(lyricsKeywords), "i"));
+        } else {
+          
+            String[] keywords = lyricsKeywords.split("\\s+");
+            Criteria[] keywordCriteria = new Criteria[keywords.length];
+            for (int i = 0; i < keywords.length; i++) {
+                keywordCriteria[i] = Criteria.where("lyrics").regex(".*" + Pattern.quote(keywords[i]) + ".*", "i");
+            }
+            query.addCriteria(new Criteria().andOperator(keywordCriteria));
+        }
+    }
+}
+
         logger.info("Executando busca avançada com critérios: {}", query);
         List<Music> results = mongoTemplate.find(query, Music.class);
         return results.stream().map(MusicMapper::toDTO).collect(Collectors.toList());
     }
-
-
 
     public Page<MusicDTO> advancedSearchPaged(String artist, String album, List<String> genres, Integer releaseYear,
                                             Double minRating, Integer afterYear, Boolean isExplicit,
@@ -114,5 +133,4 @@ public class MusicSearchService {
         
         return new PageImpl<>(musicDTOs, pageable, total);
     }
-
 }

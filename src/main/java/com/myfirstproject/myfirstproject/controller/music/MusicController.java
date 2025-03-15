@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/music")
@@ -50,11 +50,21 @@ public class MusicController {
             @RequestParam(required = false) Music.AudioQuality audioQuality,
             @RequestParam(required = false) Instant createdAfter,
             @RequestParam(required = false) Set<String> tags,
-            @RequestParam(required = false) Map<String, String> metadata) {
+            @RequestParam(required = false) String lyricsKeywords,
+            @RequestParam(required = false) Boolean exactLyricsMatch,
+            @RequestParam Map<String, String> allParams ) {
+
+                     
+        Map<String, String> metadata = allParams.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith("metadata."))
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().substring(9), 
+                        Map.Entry::getValue
+                ));
         return musicSearchService.advancedSearch(
                 artist, album, genres, releaseYear, minRating, afterYear,
                 isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter,
-                tags, metadata);
+                tags, metadata, lyricsKeywords, exactLyricsMatch);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -92,4 +102,3 @@ public class MusicController {
         return ResponseEntity.ok(response);
     }
 }
-

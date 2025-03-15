@@ -24,7 +24,7 @@ public class ProfileMapper {
                 .socialMediaLink(profile.getSocialMediaLink())
                 .location(profile.getLocation())
                 .website(profile.getWebsite())
-                .dateOfBirth(profile.getDateOfBirth() != null ? profile.getDateOfBirth().toInstant(java.time.ZoneOffset.UTC) : null) // Conversão
+                .dateOfBirth(profile.getDateOfBirth() != null ? profile.getDateOfBirth().toInstant(java.time.ZoneOffset.UTC) : null) 
                 .createdAt(profile.getCreatedAt())
                 .updatedAt(profile.getUpdatedAt())
                 .status(profile.isStatus())

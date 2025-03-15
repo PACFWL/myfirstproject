@@ -25,7 +25,7 @@ public class MusicImageService {
         if (albumCoverImage == null || albumCoverImage.isEmpty()) {
             return null;
         }
-
+        
         try {
             logger.info("Processando imagem da capa do álbum.");
             return albumCoverImage.getBytes();

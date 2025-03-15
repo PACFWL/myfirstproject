@@ -46,7 +46,6 @@ public class MusicFilterService {
                 .collect(Collectors.toList());
     }
 
-    
     public List<MusicDTO> getMusicByPrice(BigDecimal maxPrice) {
     logger.info("Buscando músicas com preço até: {}", maxPrice);
     return musicRepository.findByPriceLessThanEqual(maxPrice).stream()
