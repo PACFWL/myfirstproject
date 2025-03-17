@@ -95,12 +95,13 @@ public class MusicSearchService {
         return results.stream().map(MusicMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Page<MusicDTO> advancedSearchPaged(String artist, String album, List<String> genres, Integer releaseYear,
+    public Page<MusicDTO> advancedSearchPaged(String title, String artist, String album, List<String> genres, Integer releaseYear,
                                             Double minRating, Integer afterYear, Boolean isExplicit,
                                             Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover, 
-                                            Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, Map<String, String> metadata, Pageable pageable) {
+                                            Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, Map<String, String> metadata,
+                                            String lyricsKeywords, Boolean exactLyricsMatch, Pageable pageable) {
         Query query = new Query();
-
+        if (title != null) query.addCriteria(Criteria.where("title").is(title));
         if (artist != null) query.addCriteria(Criteria.where("artist").is(artist));
         if (album != null) query.addCriteria(Criteria.where("album").is(album));
         if (genres != null && !genres.isEmpty()) query.addCriteria(Criteria.where("genre").in(genres));
@@ -127,6 +128,26 @@ public class MusicSearchService {
             metadata.forEach((key, value) -> {
                 query.addCriteria(Criteria.where("metadata." + key).is(value));
             });
+        }
+
+
+        if (lyricsKeywords != null) {
+            if (lyricsKeywords.isEmpty()) {
+                query.addCriteria(Criteria.where("lyrics").is("")); 
+            } else {
+                if (exactLyricsMatch != null && exactLyricsMatch) {
+                  
+                    query.addCriteria(Criteria.where("lyrics").regex(Pattern.quote(lyricsKeywords), "i"));
+                } else {
+                  
+                    String[] keywords = lyricsKeywords.split("\\s+");
+                    Criteria[] keywordCriteria = new Criteria[keywords.length];
+                    for (int i = 0; i < keywords.length; i++) {
+                        keywordCriteria[i] = Criteria.where("lyrics").regex(".*" + Pattern.quote(keywords[i]) + ".*", "i");
+                    }
+                    query.addCriteria(new Criteria().andOperator(keywordCriteria));
+                }
+            }
         }
 
         long total = mongoTemplate.count(query, Music.class);

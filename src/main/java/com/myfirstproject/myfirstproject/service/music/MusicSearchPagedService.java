@@ -21,6 +21,7 @@ public class MusicSearchPagedService {
     public MusicPageDTO advancedSearchPaged(MusicSearchDTO searchDTO, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<MusicDTO> musicPage = musicSearchService.advancedSearchPaged(
+            searchDTO.getTitle(),
             searchDTO.getArtist(),
             searchDTO.getAlbum(),
             searchDTO.getGenres(),
@@ -36,6 +37,8 @@ public class MusicSearchPagedService {
             searchDTO.getCreatedAfter(),
             searchDTO.getTags(),
             searchDTO.getMetadata(),
+            searchDTO.getLyricsKeywords(),
+            searchDTO.getExactLyricsMatch(),
             pageable
     );
 

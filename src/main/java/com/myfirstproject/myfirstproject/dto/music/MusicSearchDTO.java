@@ -18,6 +18,7 @@ import com.myfirstproject.myfirstproject.model.Music;
 @AllArgsConstructor
 @Builder
 public class MusicSearchDTO {
+    private String title;
     private String artist;
     private String album;
     private List<String> genres;
@@ -33,4 +34,7 @@ public class MusicSearchDTO {
     private Instant createdAfter;
     private Set<String> tags;
     private Map<String, String> metadata;
+    private String lyricsKeywords;
+    private Boolean exactLyricsMatch;
+
 }
