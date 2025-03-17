@@ -36,6 +36,7 @@ public class MusicController {
 
     @GetMapping("/search")
     public List<MusicDTO> advancedSearch(
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) String artist,
             @RequestParam(required = false) String album,
             @RequestParam(required = false) List<String> genres,
@@ -62,7 +63,7 @@ public class MusicController {
                         Map.Entry::getValue
                 ));
         return musicSearchService.advancedSearch(
-                artist, album, genres, releaseYear, minRating, afterYear,
+                title, artist, album, genres, releaseYear, minRating, afterYear,
                 isExplicit, noLyrics, featuringArtist, maxPrice, hasAlbumCover, audioQuality, createdAfter,
                 tags, metadata, lyricsKeywords, exactLyricsMatch);
     }

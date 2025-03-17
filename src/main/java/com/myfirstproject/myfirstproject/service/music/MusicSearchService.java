@@ -31,13 +31,13 @@ public class MusicSearchService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<MusicDTO> advancedSearch(String artist, String album, List<String> genres, Integer releaseYear,
+    public List<MusicDTO> advancedSearch(String title, String artist, String album, List<String> genres, Integer releaseYear,
                                         Double minRating, Integer afterYear, Boolean isExplicit,
                                         Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
                                         Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, 
                                         Map<String, String> metadata, String lyricsKeywords, Boolean exactLyricsMatch) {
         Query query = new Query();
-
+        if (title != null) query.addCriteria(Criteria.where("title").is(title));
         if (artist != null) query.addCriteria(Criteria.where("artist").is(artist));
         if (album != null) query.addCriteria(Criteria.where("album").is(album));
         if (genres != null && !genres.isEmpty()) query.addCriteria(Criteria.where("genre").in(genres));
@@ -45,7 +45,12 @@ public class MusicSearchService {
         if (minRating != null) query.addCriteria(Criteria.where("rating").gte(minRating));
         if (afterYear != null) query.addCriteria(Criteria.where("releaseYear").gt(afterYear));
         if (isExplicit != null) query.addCriteria(Criteria.where("isExplicit").is(isExplicit));
-        if (noLyrics != null && noLyrics) query.addCriteria(Criteria.where("lyrics").is(null));
+        if (noLyrics != null && noLyrics) {
+            query.addCriteria(new Criteria().orOperator(
+                Criteria.where("lyrics").is(""), 
+                Criteria.where("lyrics").is(null)
+            ));
+        }
         if (featuringArtist != null) query.addCriteria(Criteria.where("featuredArtists").in(featuringArtist));
         if (maxPrice != null) query.addCriteria(Criteria.where("price").lte(maxPrice));
         if (hasAlbumCover != null) {

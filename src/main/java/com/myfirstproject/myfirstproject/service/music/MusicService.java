@@ -40,11 +40,11 @@ public class MusicService {
         this.musicImageService = musicImageService;
     }
  
-    public List<MusicDTO> advancedSearch(String artist, String album, List<String> genres, Integer releaseYear,
+    public List<MusicDTO> advancedSearch(String title, String artist, String album, List<String> genres, Integer releaseYear,
                                           Double minRating, Integer afterYear, Boolean isExplicit,
                                           Boolean noLyrics, String featuringArtist, BigDecimal maxPrice, Boolean hasAlbumCover,
                                           Music.AudioQuality audioQuality, Instant createdAfter, Set<String> tags, Map<String, String> metadata,String lyricsKeywords, Boolean exactLyricsMatch) {
-        return musicSearchService.advancedSearch(artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, 
+        return musicSearchService.advancedSearch(title, artist, album, genres, releaseYear, minRating, afterYear, isExplicit, noLyrics, featuringArtist, 
                                                 maxPrice, hasAlbumCover, audioQuality, createdAfter, tags, metadata, lyricsKeywords, exactLyricsMatch);
     }
     
